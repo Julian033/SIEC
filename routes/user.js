@@ -9,7 +9,7 @@ var auth = require('../services/authentication');
 var checkRole = require('../services/checkRole');
 
 
-//consulta para regist
+//consulta para registros
 router.post('/signup', (req, res) => {
     let user = req.body;
     query = "select email,password,name,role,status,areaId from usuarios where email=?";

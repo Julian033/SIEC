@@ -1,0 +1,29 @@
+<body>
+    <mat-card>
+        <b><span>Dashboard</span></b>
+    </mat-card>
+    <br>
+    <div class="row">
+        <div class="column">
+            <div class="card">
+                <div class="container">
+                    <h2 class="title">Areas Total:</h2>
+                    <h1 class="title">{{data?.area}}</h1>
+                    <p><button color="primary" class="button" [routerLink]="['/SIEC/area']">Ver Areas</button></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="card">
+                <div class="container">
+                    <h2 class="title">Total de Equipos:</h2>
+                    <h1 class="title">{{data?.equipos}}</h1>
+                    <p><button color="primary" class="button" [routerLink]="['/SIEC/equipos']">Ver Equipos</button></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+</body>

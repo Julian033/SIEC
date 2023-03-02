@@ -1,1 +1,71 @@
-<p>manage-equipment works!</p>
+<mat-card>
+    <b><span>Manage Equipment</span></b>
+    <button mat-flat-button color="primary" class="float-right" (click)="handleAddAction()"> Add</button>
+</mat-card>
+
+<hr>
+<mat-card>
+    <mat-form-field appearance="fill">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" #input>
+
+    </mat-form-field>
+</mat-card>
+<hr>
+<div class="responsive_table">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="sn">
+            <th mat-header-cell *matHeaderCellDef>Serie</th>
+            <th mat-cell *matCellDef="let element">{{element.sn}}</th>
+        </ng-container>
+
+        <ng-container matColumnDef="inventory">
+            <th mat-header-cell *matHeaderCellDef>Inventario</th>
+            <th mat-cell *matCellDef="let element">{{element.inventory}}</th>
+        </ng-container>
+
+        <ng-container matColumnDef="brand">
+            <th mat-header-cell *matHeaderCellDef>Marca</th>
+            <th mat-cell *matCellDef="let element">{{element.brand}}</th>
+        </ng-container>
+
+
+        <ng-container matColumnDef="model">
+            <th mat-header-cell *matHeaderCellDef>Modelo</th>
+            <th mat-cell *matCellDef="let element">{{element.model}}</th>
+        </ng-container>
+
+
+        <ng-container matColumnDef="area">
+            <th mat-header-cell *matHeaderCellDef>Area</th>
+            <th mat-cell *matCellDef="let element">{{element.Area}}</th>
+        </ng-container>
+
+
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Tipo de Equipo</th>
+            <th mat-cell *matCellDef="let element">{{element.Type}}</th>
+        </ng-container>
+
+        <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <th mat-cell *matCellDef="let element" class="action-link">
+                <button mat-icon-button color="primary" matTooltip="Edit" (click)="handleEditAction(element)"> 
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="primary" matTooltip="Delete" (click)="handleDeleteAction(element)"> 
+                    <mat-icon>delete</mat-icon>
+                </button>
+                <mat-slide-toggle (change)="onChange($event.checked,element.equipoId)" matTooltip="Activate o Desactivate Equipment" [checked]="element.status"></mat-slide-toggle>
+            </th>
+        </ng-container>
+        
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
+        <tr mat-row *matRowDef="let row; columns:displayedColumns"></tr>
+
+        
+
+
+    </table>
+</div>

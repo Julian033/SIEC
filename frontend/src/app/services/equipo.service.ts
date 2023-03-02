@@ -18,7 +18,8 @@ url = environment.apiUrl;
   }
 
   update(data:any){
-    return this.httpClient.patch(this.url+"/equipo/update",data,{
+    return this.httpClient.patch(this.url+
+      "/equipo/update",data,{
       headers: new HttpHeaders().set('Content-Type', "application/json")
     })
   }
@@ -26,6 +27,22 @@ url = environment.apiUrl;
   getEquipment(){
     return this.httpClient.get(this.url+"/equipo/get");
   }
+
+  updateStatus(data:any){
+    return this.httpClient.patch(this.url+
+      "/equipo/updateStatus/",data,{
+        headers: new HttpHeaders().set('Content-Type',"application/json")
+      })
+  }
+
+  delete(equipoId:any){
+    return this.httpClient.delete(this.url+
+    "/equipo/delete/"+equipoId,{
+      headers: new HttpHeaders().set('Content-Type', "application/json")
+    })
+  }
+
+  
 
 
 

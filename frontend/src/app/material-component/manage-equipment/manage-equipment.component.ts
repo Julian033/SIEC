@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { EquipoService } from 'src/app/services/equipo.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
+import { ConfirmationComponent } from '../confirmation/confirmation.component';
+import { EquipmentComponent } from '../dialog/equipment/equipment.component';
 
 @Component({
   selector: 'app-manage-equipment',
@@ -13,11 +15,11 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
   styleUrls: ['./manage-equipment.component.scss']
 })
 export class ManageEquipmentComponent implements OnInit {
-  displayedColumns:string[]  = ['name','edit'];
-  dataSource:any;
-  responseMessage:any;
+ displayedColumns:string[] = ['sn','inventory','brand','model','area','type','edit']
+ dataSource:any;
+ responseMessage:any;
 
-  constructor(private equipmentService:EquipoService,
+  constructor(private equipoService:EquipoService,
     private ngxService:NgxUiLoaderService,
     private dialog:MatDialog,
     private snackbarService:SnackbarService,
@@ -25,14 +27,89 @@ export class ManageEquipmentComponent implements OnInit {
 
   ngOnInit(): void {
     this.ngxService.start();
+    this.tableData();
   }
 
   tableData(){
-    this.equipmentService.getEquipment().subscribe((response:any)=>{
+    this.equipoService.getEquipment().subscribe((response:any)=>{
       this.ngxService.stop();
       this.dataSource = new MatTableDataSource(response);
     },(error:any)=>{
       this.ngxService.stop();
+       if(error.error?.message){
+        this.responseMessage = error.error?.message;
+       }
+       else{
+        this.responseMessage = GlobalConstants.genericError;
+       }
+       this.snackbarService.openSnackBar(this.responseMessage,GlobalConstants.error);
+    })
+  }
+
+  applyFilter(event:Event){
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLocaleLowerCase();
+  }
+
+  handleAddAction(){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      action: 'Add'
+     }
+     dialogConfig.width = "850px";
+     const dialogRef = this.dialog.open(EquipmentComponent,dialogConfig);
+     this.router.events.subscribe(()=>{
+      dialogRef.close();
+     })
+     const sub= dialogRef.componentInstance.onAddEquipment.subscribe(
+      (response) =>{
+        this.tableData();
+      }
+     )
+
+     
+  }
+
+  handleEditAction(values:any){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      action: 'Edit',
+      data:values
+     }
+     dialogConfig.width = "850px";
+     const dialogRef = this.dialog.open(EquipmentComponent,dialogConfig);
+     this.router.events.subscribe(()=>{
+      dialogRef.close();
+     })
+     const sub= dialogRef.componentInstance.onEditEquipment.subscribe(
+      (response) =>{
+        this.tableData();
+      }
+     )
+  }
+
+  handleDeleteAction(values:any){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      message: 'delete ' + values.sn
+    };
+    const dialogRef = this.dialog.open(ConfirmationComponent,dialogConfig);
+    const sub = dialogRef.componentInstance.onEmitStatusChange.subscribe((response)=>{
+      this.ngxService.start();
+      this.deleteEquipment(values.equipoId);
+      dialogRef.close();
+    })
+  }
+
+  deleteEquipment(equipoId:any){
+    this.equipoService.delete(equipoId).subscribe((response:any)=>{
+      this.ngxService.stop();
+      this.tableData();
+      this.responseMessage = response?.message;
+      this.snackbarService.openSnackBar(this.responseMessage,"Success");
+    },(error:any)=>{
+      this.ngxService.stop();
+      console.log(error);
       if(error.error?.message){
         this.responseMessage = error.error?.message;
       }
@@ -43,9 +120,26 @@ export class ManageEquipmentComponent implements OnInit {
     })
   }
 
-   applyFilter(event:Event){
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-   }
+  onChange(status:any,equipoId:any){
+    var data = {
+      status:status.toString(),
+      equipoId:equipoId
+    }
+    this.equipoService.updateStatus(data).subscribe((response:any)=>{
+       this.ngxService.stop();
+       this.responseMessage = response?.message;
+       this.snackbarService.openSnackBar(this.responseMessage,"Success");
+    },(error:any)=>{
+      this.ngxService.stop();
+      console.log(error);
+      if(error.error?.message){ 
+        this.responseMessage = error.error?.message;
+      }
+      else{
+        this.responseMessage = GlobalConstants.genericError;
+      }
+      this.snackbarService.openSnackBar(this.responseMessage,GlobalConstants.error);
+    })
+  }
 
 }

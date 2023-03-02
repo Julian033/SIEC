@@ -29,7 +29,7 @@ export class AreaService {
   getArea(){
     return this.httpClient.get(this.url+"/area/get");
   }
-
+  
   delete(areaId:any){
     return this.httpClient.delete(this.url+
       "/area/delete/"+areaId,{

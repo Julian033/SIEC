@@ -152,13 +152,12 @@ export class EquipmentComponent implements OnInit {
 
   edit(){
     var formData = this.equipmentForm.value;
+
     var data = {
       sn:formData.sn,
       inventory:formData.inventory,
       monitor:formData.monitor,
       keyboard:formData.keyboard,
-      typeId:formData.typeId,
-      areaId:formData.areaId,
       brand:formData.brand,
       model:formData.model,
       processor:formData.processor,
@@ -172,6 +171,8 @@ export class EquipmentComponent implements OnInit {
       antivirus:formData.antivirus,
       office:formData.office,
       systemo:formData.systemo,
+      typeId:formData.typeId,
+      areaId:formData.areaId,
       equipoId:this.dialogData.data.equipoId,
     }
     this.equipoService.update(data).subscribe((response:any)=>{

@@ -215,7 +215,8 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="center">
-    <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()">Add</button>
+    <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()"
+    [disabled]="!(equipmentForm.valid && equipmentForm.dirty )">{{action}}</button>
     <button mat-raised-button color="primary" mat-dialog-close>Close</button>
 
 </mat-dialog-actions>

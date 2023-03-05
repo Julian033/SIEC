@@ -36,16 +36,18 @@
         </ng-container>
 
 
-        <ng-container matColumnDef="area">
-            <th mat-header-cell *matHeaderCellDef>Area</th>
-            <th mat-cell *matCellDef="let element">{{element.Area}}</th>
-        </ng-container>
-
-
         <ng-container matColumnDef="type">
             <th mat-header-cell *matHeaderCellDef>Tipo de Equipo</th>
-            <th mat-cell *matCellDef="let element">{{element.Type}}</th>
+            <th mat-cell *matCellDef="let element">{{element.typeId}}</th>
         </ng-container>
+        
+        <ng-container matColumnDef="area">
+            <th mat-header-cell *matHeaderCellDef>Area</th>
+            <th mat-cell *matCellDef="let element">{{element.areaId}}</th>
+        </ng-container>
+
+
+
 
         <ng-container matColumnDef="edit">
             <th mat-header-cell *matHeaderCellDef>Action</th>

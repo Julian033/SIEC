@@ -4,6 +4,7 @@ import { RouteGuardService } from '../services/route-guard.service';
 import { ManageAreaComponent } from './manage-area/manage-area.component';
 import { ManageEquipmentComponent } from './manage-equipment/manage-equipment.component';
 import { ManageTypeComponent } from './manage-type/manage-type.component';
+import { ManageUserComponent } from './manage-user/manage-user.component';
 
 
 
@@ -33,8 +34,16 @@ export const MaterialRoutes: Routes = [
         data:{
             expectedRole:['admin']
         }   
-    }
+    },
 
+    {
+        path:'user',
+        component:ManageUserComponent ,
+        canActivate:[RouteGuardService],
+        data:{
+            expectedRole:['admin']
+        }   
+    }
     
 ];
 

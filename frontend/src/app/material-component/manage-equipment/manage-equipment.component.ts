@@ -15,7 +15,7 @@ import { EquipmentComponent } from '../dialog/equipment/equipment.component';
   styleUrls: ['./manage-equipment.component.scss']
 })
 export class ManageEquipmentComponent implements OnInit {
- displayedColumns:string[] = ['sn','inventory','brand','model','area','type','edit']
+ displayedColumns:string[] = ['sn','inventory','brand','model','type','area','edit']
  dataSource:any;
  responseMessage:any;
 
@@ -70,11 +70,12 @@ export class ManageEquipmentComponent implements OnInit {
      
   }
 
-  handleEditAction(values:any){
+  handleEditAction(value:any){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       action: 'Edit',
-      data:values
+      data:value
+     
      }
      dialogConfig.width = "850px";
      const dialogRef = this.dialog.open(EquipmentComponent,dialogConfig);

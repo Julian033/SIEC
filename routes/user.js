@@ -16,7 +16,7 @@ router.post('/signup', (req, res) => {
     connection.query(query, [user.email], (err, results) => {
         if (!err) {
             if (results.length <= 0) {
-                query = "insert into usuarios (name,password,email,role,status,areaId) values (?,?,?,'user','false','57')";
+                query = "insert into usuarios (name,password,email,role,status,areaId) values (?,?,?,'user','false','1')";
                 connection.query(query, [user.name, user.password, user.email], (err, results) => {
                     if (!err) {
                         return res.status(200).json({ message: "Successfully Registered" });
@@ -113,7 +113,7 @@ router.post('/forgotpassword', (req, res) => {
 })
 
 router.get('/get', auth.authenticationToken, checkRole.checkRole, (req, res) => {
-    var query = "select userid,name,email,status from usuarios where role='user'";
+    var query = "select user,name,email,status,areaId from usuarios";
     connection.query(query, (err, results) => {
         if (!err) {
             return res.status(200).json(results);
@@ -124,10 +124,11 @@ router.get('/get', auth.authenticationToken, checkRole.checkRole, (req, res) => 
     })
 })
 
+
 router.patch('/update', auth.authenticationToken, checkRole.checkRole, (req, res) => {
     let user = req.body;
-    var query = "update usuarios set status=? where userid=?";
-    connection.query(query, [user.status, user.userid], (err, results) => {
+    var query = "update usuarios set status=? where user=?";
+    connection.query(query, [user.status, user.user], (err, results) => {
         if (!err) {
             if (results.affetedRows == 0) {
                 return res.status(404).json({ message: "User does not exist" });
@@ -171,6 +172,24 @@ router.post('/changePassword', auth.authenticationToken, (req, res) => {
             else {
                 return res.status(400).json({ message: "Something went wrong. Please try again later" });
             }
+        }
+        else {
+            return res.status(500).json(err);
+        }
+    })
+})
+
+router.delete('/delete/:user', auth.authenticationToken, checkRole.checkRole, (req, res, next) => {
+    const id = req.params.user;
+    const ls = req.body
+    console.log(ls);
+    var query = "delete from usuarios where user=?";
+    connection.query(query, [id], (err, results) => {
+        if (!err) {
+            if (results.affectedRows == 0) {
+                return res.status(404).json({ message: "User id does not found " });
+            }
+            return res.status(200).json({ message: "User Delete Successfully" })
         }
         else {
             return res.status(500).json(err);

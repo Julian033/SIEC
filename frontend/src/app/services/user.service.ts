@@ -44,7 +44,22 @@ export class UserService {
     })
   }
 
+  getUsers(){
+    return this.httpClient.get(this.url+"/user/get");
+  }
 
+  update(data:any){
+    return this.httpClient.patch(this.url+"/user/update",data,{
+      headers:new HttpHeaders().set('Content-Type',"application/json ")
+    })
+  } 
+
+  delete(user:any){
+    return this.httpClient.delete(this.url+
+    "/user/delete/"+user,{
+      headers: new HttpHeaders().set('Content-Type',"application/json")
+    })
+  }
 
 
 }

@@ -31,7 +31,7 @@ router.post('/add', auth.authenticationToken, checkRole.checkRole, (req, res, ne
 
 
 router.get('/get', auth.authenticationToken, (req, res, next) => {
-    var query = "SELECT e.equipoId, e.sn, e.inventory,e.monitor,e.keyboard,e.status,h.brand, h.model,h.processor,h.generation,h.ram,h.hddssd,h.connection,h.nodetype,h.bandwidth,h.warranty,s.antivirus, s.office, s.systemo,t.name as Type,a.name as Area FROM equipos e INNER JOIN hardware h ON e.equipoId = h.equipoId INNER JOIN type t ON e.typeId = t.typeId INNER JOIN area a ON e.areaId = a.areaId INNER JOIN software s ON e.equipoId = s.equipoId;";
+    var query = "SELECT e.equipoId, e.sn, e.inventory,e.monitor,e.keyboard,e.status,h.brand, h.model,h.processor,h.generation,h.ram,h.hddssd,h.connection,h.nodetype,h.bandwidth,h.warranty,s.antivirus, s.office, s.systemo,t.name as typeId,a.name as areaId FROM equipos e INNER JOIN hardware h ON e.equipoId = h.equipoId INNER JOIN type t ON e.typeId = t.typeId INNER JOIN area a ON e.areaId = a.areaId INNER JOIN software s ON e.equipoId = s.equipoId;";
     connection.query(query, (err, results) => {
         if (!err) {
             return res.status(200).json(results);

@@ -19,6 +19,7 @@ import { AreaComponent } from './dialog/area/area.component';
 import { ManageTypeComponent } from './manage-type/manage-type.component';
 import { TypeComponent } from './dialog/type/type.component';
 import { ManageUserComponent } from './manage-user/manage-user.component';
+import { UserComponent } from './dialog/user/user.component';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { ManageUserComponent } from './manage-user/manage-user.component';
     AreaComponent,
     ManageTypeComponent,
     TypeComponent,
-    ManageUserComponent
+    ManageUserComponent,
+    UserComponent,
   ]
 })
 export class MaterialComponentsModule {}

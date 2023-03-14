@@ -19,6 +19,13 @@ export class UserService {
     })
   }
 
+  add(data: any) {
+    return this.httpClient.post(this.url +
+      "/user/add/", data, {
+      headers: new HttpHeaders().set('Content-Type', "application/json")
+    })
+  }
+
   forgotPassword(data: any) {
     return this.httpClient.post(this.url +
       "/user/forgotpassword/", data, {
@@ -48,17 +55,25 @@ export class UserService {
     return this.httpClient.get(this.url+"/user/get");
   }
 
-  update(data:any){
-    return this.httpClient.patch(this.url+"/user/update",data,{
-      headers:new HttpHeaders().set('Content-Type',"application/json ")
-    })
-  } 
-
-  delete(user:any){
+  delete(userId:any){
     return this.httpClient.delete(this.url+
-    "/user/delete/"+user,{
+    "/user/delete/"+userId,{
       headers: new HttpHeaders().set('Content-Type',"application/json")
     })
+  }
+
+  updateStatus(data:any){
+    return this.httpClient.patch(this.url+
+      "/user/updateStatus/",data,{
+        headers: new HttpHeaders().set('Content-Type',"application/json")
+      })
+  }
+
+  update(data:any){
+    return this.httpClient.patch(this.url+
+      "/user/update",data,{
+        headers: new HttpHeaders().set('Content-Type',"application/json")
+      })
   }
 
 

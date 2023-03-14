@@ -7,6 +7,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import { UserService } from 'src/app/services/user.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { ConfirmationComponent } from '../confirmation/confirmation.component';
+import { UserComponent } from '../dialog/user/user.component';
 
 @Component({
   selector: 'app-manage-user',
@@ -14,14 +15,14 @@ import { ConfirmationComponent } from '../confirmation/confirmation.component';
   styleUrls: ['./manage-user.component.scss']
 })
 export class ManageUserComponent implements OnInit {
-    displayedColumns:string[] = ['name','email','status'];
-    dataSource:any;
-    responseMessage:any;
+  displayedColumns:string[] = ['name','email','role','status','areaName','edit'];
+  dataSource:any;
+  responseMessage:any;
 
-  constructor(private ngxService:NgxUiLoaderService,
-    private userService:UserService,
-    private snackbarService:SnackbarService,
+  constructor(private userService:UserService,
+    private ngxService:NgxUiLoaderService,
     private dialog:MatDialog,
+    private snackbarService:SnackbarService,
     private router:Router) { }
 
   ngOnInit(): void {
@@ -35,76 +36,113 @@ export class ManageUserComponent implements OnInit {
       this.dataSource = new MatTableDataSource(response);
     },(error:any)=>{
       this.ngxService.stop();
+      console.log(error);
       if(error.error?.message){
         this.responseMessage = error.error?.message;
       }
       else{
-        this.responseMessage = GlobalConstants.genericError;
-      }
+         this.responseMessage = GlobalConstants.genericError;
+      } 
       this.snackbarService.openSnackBar(this.responseMessage,GlobalConstants.error);
     })
   }
 
   applyFilter(event:Event){
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
+    this.dataSource.filter = filterValue.trim().toLocaleLowerCase();
   }
 
-  handleChangeAction(status:any,user:any){
-    var data={
-      status:status.toString(),
-      user:user
+  handleAddAction(){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      action:'Add'
     }
-    this.userService.update(data).subscribe((response:any)=>{
+    dialogConfig.width = "850px";
+    const dialogRef = this.dialog.open(UserComponent,dialogConfig);
+    this.router.events.subscribe(()=>{
+      dialogRef.close();
+    })
+    const sub = dialogRef.componentInstance.onAddUser.subscribe(
+      (response)=>{
+        this.tableData();
+      }
+    )
+  }
+
+  handleEditAction(values:any){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      action:'Edit',
+      data:values
+    }
+    dialogConfig.width = "850px";
+    const dialogRef = this.dialog.open(UserComponent,dialogConfig);
+    this.router.events.subscribe(()=>{
+      dialogRef.close();
+    })
+    const sub = dialogRef.componentInstance.onEditUser.subscribe(
+      (response)=>{
+        this.tableData();
+      }
+    )
+  }
+
+  
+  handleDeleteAction(values:any){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data={
+      message:'Delete '+values.name+ ' '
+    };
+    const dialogRef = this.dialog.open(ConfirmationComponent,dialogConfig);
+    const sub = dialogRef.componentInstance.onEmitStatusChange.subscribe((response)=>{
+      this.ngxService.start();
+      this.deleteUser(values.userId);
+      dialogRef.close();
+    })
+  }
+
+
+  
+  deleteUser(userId:any){
+    this.userService.delete(userId).subscribe((response:any)=>{
       this.ngxService.stop();
+      this.tableData();
       this.responseMessage = response?.message;
       this.snackbarService.openSnackBar(this.responseMessage,"Success");
     },(error:any)=>{
       this.ngxService.stop();
       console.log(error);
-      if(error.error?.message){ 
+      if(error.error?.message){
         this.responseMessage = error.error?.message;
       }
       else{
-        this.responseMessage = GlobalConstants.genericError;
-      }
+         this.responseMessage = GlobalConstants.genericError;
+      } 
       this.snackbarService.openSnackBar(this.responseMessage,GlobalConstants.error);
     })
   }
 
-  handleDeleteAction(values:any){
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      message: 'delete ' + values.name
-    };
-    const dialogRef = this.dialog.open(ConfirmationComponent,dialogConfig);
-    const sub = dialogRef.componentInstance.onEmitStatusChange.subscribe((response)=>{
-      this.ngxService.start();
-      this.deleteUser(values.user);
-      dialogRef.close();
+  onChange(status:any,userId:any){
+    var data = {
+      status:status.toString(),
+      userId:userId
+    }
+    this.userService.updateStatus(data).subscribe((response:any)=>{
+      this.ngxService.stop();
+      this.responseMessage = response?.message;
+      this.snackbarService.openSnackBar(this.responseMessage,"success");
+    },(error:any)=>{
+      this.ngxService.stop();
+      console.log(error);
+      if(error.error?.message){
+        this.responseMessage = error.error?.message;
+      }
+      else{
+         this.responseMessage = GlobalConstants.genericError;
+      } 
+      this.snackbarService.openSnackBar(this.responseMessage,GlobalConstants.error);
     })
   }
 
-  deleteUser(user:any){    
-    this.userService.delete(user).subscribe((response:any)=>{
-    this.ngxService.stop();
-    this.tableData();
-    this.responseMessage = response?.message;
-    this.snackbarService.openSnackBar(this.responseMessage,"Success");
-  },(error:any)=>{
-    this.ngxService.stop();
-    console.log(error);
-    if(error.error?.message){
-      this.responseMessage = error.error?.message;
-    }
-    else{
-      this.responseMessage = GlobalConstants.genericError;
-    }
-    this.snackbarService.openSnackBar(this.responseMessage,GlobalConstants.error);
-  })}
-
-
-  onChange(){}
-
+  
 }

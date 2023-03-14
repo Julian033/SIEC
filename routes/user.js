@@ -8,6 +8,32 @@ require('dotenv').config();
 var auth = require('../services/authentication');
 var checkRole = require('../services/checkRole');
 
+router.post('/add', (req, res) => {
+    let user = req.body;
+    query = "select email,password,name,role,status,areaId from usuarios where email=?";
+    connection.query(query, [user.email], (err, results) => {
+        if (!err) {
+            if (results.length <= 0) {
+                query = "insert into usuarios (name,password,email,role,status,areaId) values (?,?,?,?,?,?)";
+                connection.query(query, [user.name, user.password, user.email,user.role,user.status,user.areaId], (err, results) => {
+                    if (!err) {
+                        return res.status(200).json({ message: "Successfully Registered" });
+                    }
+
+                    else {
+                        return res.status(500).json(err);
+                    }
+                })
+            }
+            else {
+                return res.status(400).json({ message: "Email Already Exist." });
+            }
+        }
+        else {
+            return res.status(500).json(err);
+        }
+    })
+})
 
 //consulta para registros
 router.post('/signup', (req, res) => {
@@ -37,6 +63,22 @@ router.post('/signup', (req, res) => {
     })
 })
 
+router.patch('/update',auth.authenticationToken,checkRole.checkRole, (req,res,next)=>{
+    let area = req.body;
+    console.log(area);
+    var query = "update usuarios set name=?,email=?,password=?,role=?,status=?,areaId=? where userId=?";
+    connection.query(query,[area.name,area.email,area.password,area.role,area.status,area.areaId,area.userId],(err,results)=>{
+        if(!err){
+            if(results.affectedRows == 0){
+                return res.status(404).json({message: "User Id does not found"});
+            }
+            return res.status(200).json({message: "User Update Sucessfully"});
+        }
+        else{
+            return res.status(500).json(err);
+        }
+    })
+})
 
 //consulta login para inicio de sesion con validacion
 router.post('/login', (req, res) => {
@@ -113,27 +155,10 @@ router.post('/forgotpassword', (req, res) => {
 })
 
 router.get('/get', auth.authenticationToken, checkRole.checkRole, (req, res) => {
-    var query = "select user,name,email,status,areaId from usuarios";
+    var query = "select u.userId,u.name,u.email,u.role,u.status,a.name as area from usuarios u inner join area a on u.areaId= a.areaId";
     connection.query(query, (err, results) => {
         if (!err) {
             return res.status(200).json(results);
-        }
-        else {
-            return res.status(500).json(err);
-        }
-    })
-})
-
-
-router.patch('/update', auth.authenticationToken, checkRole.checkRole, (req, res) => {
-    let user = req.body;
-    var query = "update usuarios set status=? where user=?";
-    connection.query(query, [user.status, user.user], (err, results) => {
-        if (!err) {
-            if (results.affetedRows == 0) {
-                return res.status(404).json({ message: "User does not exist" });
-            }
-            return res.status(200).json({ message: "User Update Successfully" });
         }
         else {
             return res.status(500).json(err);
@@ -179,17 +204,32 @@ router.post('/changePassword', auth.authenticationToken, (req, res) => {
     })
 })
 
-router.delete('/delete/:user', auth.authenticationToken, checkRole.checkRole, (req, res, next) => {
-    const id = req.params.user;
-    const ls = req.body
-    console.log(ls);
-    var query = "delete from usuarios where user=?";
+router.delete('/delete/:userId', auth.authenticationToken, checkRole.checkRole, (req, res, next) => {
+    const id = req.params.userId;
+    var query = "delete from usuarios where userId=?";
     connection.query(query, [id], (err, results) => {
         if (!err) {
             if (results.affectedRows == 0) {
                 return res.status(404).json({ message: "User id does not found " });
             }
             return res.status(200).json({ message: "User Delete Successfully" })
+        }
+        else {
+            return res.status(500).json(err);
+        }
+    })
+})
+
+
+router.patch('/updateStatus', auth.authenticationToken, checkRole.checkRole, (req, res, next) => {
+    let user = req.body;
+    var query = "update usuarios set status=? where userId=?";
+    connection.query(query, [user.status, user.userId], (err, results) => {
+        if (!err) {
+            if (results.affetedRows == 0) {
+                return res.status(404).json({ message: "User id does not found" });
+            }
+            return res.status(200).json({ message: "User Status Updated Successfully" });
         }
         else {
             return res.status(500).json(err);

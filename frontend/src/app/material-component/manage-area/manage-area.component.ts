@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -17,7 +18,13 @@ import { AreaComponent } from '../dialog/area/area.component';
 export class ManageAreaComponent implements OnInit {
   displayedColumns:string[]= ['name','edit'];
   dataSource:any;
-  responseMessage:any; 
+ 
+  responseMessage: any;
+  pageSizeOptions: number[] = [5, 10, 25, 50];
+
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
+  
   constructor(private areaService:AreaService,
     private ngxService:NgxUiLoaderService,
     private dialog:MatDialog,
@@ -33,6 +40,7 @@ export class ManageAreaComponent implements OnInit {
     this.areaService.getArea().subscribe((response:any)=>{
       this.ngxService.stop();
       this.dataSource = new MatTableDataSource(response);
+      this.dataSource.paginator = this.paginator;
     },(error:any)=>{
       this.ngxService.stop();
       if(error.error?.message){

@@ -13,6 +13,8 @@
 </mat-card>
 <hr>
 <div class="responsive_table">
+    <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons
+    #paginator></mat-paginator>
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
         <ng-container matColumnDef="sn">
             <th mat-header-cell *matHeaderCellDef>Serie</th>

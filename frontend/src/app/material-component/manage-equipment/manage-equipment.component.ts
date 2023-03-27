@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -17,7 +18,11 @@ import { EquipmentComponent } from '../dialog/equipment/equipment.component';
 export class ManageEquipmentComponent implements OnInit {
  displayedColumns:string[] = ['sn','inventory','brand','model','type','area','edit']
  dataSource:any;
- responseMessage:any;
+ responseMessage: any;
+ pageSizeOptions: number[] = [50, 100, 500, 1000];
+
+ @ViewChild(MatPaginator)
+ paginator!: MatPaginator;
 
   constructor(private equipoService:EquipoService,
     private ngxService:NgxUiLoaderService,
@@ -34,6 +39,7 @@ export class ManageEquipmentComponent implements OnInit {
     this.equipoService.getEquipment().subscribe((response:any)=>{
       this.ngxService.stop();
       this.dataSource = new MatTableDataSource(response);
+      this.dataSource.paginator = this.paginator;
     },(error:any)=>{
       this.ngxService.stop();
        if(error.error?.message){

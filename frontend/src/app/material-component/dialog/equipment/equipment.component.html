@@ -54,7 +54,7 @@
 
             <div fxLayout="row wrap">
                 <mat-form-field appearance="fill" fxFlex>
-                    <mat-label>Brand</mat-label>
+                    <mat-label>Marca</mat-label>
                     <input matInput formControlName="brand" required>
                     <mat-error *ngIf="equipmentForm.controls.brand.touched && equipmentForm.controls.brand.invalid">
                         <span *ngIf="equipmentForm.controls.brand.error.required">This field is mandatory</span>
@@ -183,6 +183,20 @@
                     </mat-error>
                 </mat-form-field>
             </div>
+
+            
+            <div fxLayout="row wrap">
+                <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Resguardo</mat-label>
+                    <input matInput formControlName="guard" required>
+                    <mat-error *ngIf="equipmentForm.controls.guard.touched && equipmentForm.controls.guard.invalid">
+                        <span *ngIf="equipmentForm.controls.guard.error.required">This field is mandatory</span>
+                        <span *ngIf="equipmentForm.controls.guard.error.pattern">This field is invalid</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+
 
             <div fxLayout="row wrap">
                 <mat-form-field appearance="fill" fxFlex>

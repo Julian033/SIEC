@@ -37,6 +37,11 @@
             <th mat-cell *matCellDef="let element">{{element.model}}</th>
         </ng-container>
 
+        <ng-container matColumnDef="guard">
+            <th mat-header-cell *matHeaderCellDef>Resguardo</th>
+            <th mat-cell *matCellDef="let element">{{element.guard}}</th>
+        </ng-container>
+
 
         <ng-container matColumnDef="type">
             <th mat-header-cell *matHeaderCellDef>Tipo de Equipo</th>

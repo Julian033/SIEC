@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AreaService {
-  url = environment.apiUrl;
+  url = 'http://localhost:8080';
 
 
   constructor(private httpClient:HttpClient) { }

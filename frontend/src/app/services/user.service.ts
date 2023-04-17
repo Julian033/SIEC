@@ -9,7 +9,6 @@ import { environment } from '../../environments/environment';
 export class UserService {
   url = 'https://siec-production.up.railway.app';
 
-
   constructor(private httpClient: HttpClient) { }
 
   signup(data: any) {

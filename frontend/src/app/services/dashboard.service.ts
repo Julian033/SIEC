@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class DashboardService {
   
-  url = 'http://localhost:8080';
+  url = 'https://siec-production.up.railway.app';
   constructor(private httpClient:HttpClient) { }
 
 

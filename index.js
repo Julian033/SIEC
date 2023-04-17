@@ -1,6 +1,6 @@
 const express = require('express');
 var cors = require('cors');
-const connection = require('./connection');
+const pool = require('./connection');
 const app = express();
 const userRoute = require ('./routes/user');
 const areaRoute = require ('./routes/area');

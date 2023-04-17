@@ -1,6 +1,7 @@
 const express = require('express');
-const connection = require('../connection');
+const pool = require('../connection');
 const router = express.Router();
+
 
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
@@ -10,8 +11,8 @@ var checkRole = require('../services/checkRole');
 
 router.post('/add', (req, res) => {
     let user = req.body;
-    query = "select email,password,name,role,status,areaId from usuarios where email=?";
-    connection.query(query, [user.email], (err, results) => {
+    const query = "select email,password,name,role,status,areaId from usuarios where email=?";
+    pool.query(query, [user.email], (err, results) => {
         if (!err) {
             if (results.length <= 0) {
                 query = "insert into usuarios (name,password,email,role,status,areaId) values (?,?,?,?,?,?)";
@@ -36,6 +37,7 @@ router.post('/add', (req, res) => {
 })
 
 //consulta para registros
+/* 
 router.post('/signup', (req, res) => {
     let user = req.body;
     query = "select email,password,name,role,status,areaId from usuarios where email=?";
@@ -62,12 +64,31 @@ router.post('/signup', (req, res) => {
         }
     })
 })
+*/
+
+router.post('/signup', async (req, res) => {
+    let user = req.body;
+    const connection = await pool.getConnection();
+    try {
+        const [rows] = await connection.execute("SELECT email, password, name, role, status, areaId FROM usuarios WHERE email = ?", [user.email]);
+        if (rows.length <= 0) {
+            const [result] = await connection.execute("INSERT INTO usuarios (name, password, email, role, status, areaId) VALUES (?, ?, ?, 'user', 'false', '1')", [user.name, user.password, user.email]);
+            return res.status(200).json({ message: "Successfully Registered" });
+        } else {
+            return res.status(400).json({ message: "Email Already Exist." });
+        }
+    } catch (error) {
+        return res.status(500).json(error);
+    } finally {
+        connection.release();
+    }
+});
 
 router.patch('/update',auth.authenticationToken,checkRole.checkRole, (req,res,next)=>{
     let area = req.body;
     console.log(area);
-    var query = "update usuarios set name=?,email=?,password=?,role=?,status=?,areaId=? where userId=?";
-    connection.query(query,[area.name,area.email,area.password,area.role,area.status,area.areaId,area.userId],(err,results)=>{
+    const query = "update usuarios set name=?,email=?,password=?,role=?,status=?,areaId=? where userId=?";
+    pool.query(query,[area.name,area.email,area.password,area.role,area.status,area.areaId,area.userId],(err,results)=>{
         if(!err){
             if(results.affectedRows == 0){
                 return res.status(404).json({message: "User Id does not found"});
@@ -81,10 +102,39 @@ router.patch('/update',auth.authenticationToken,checkRole.checkRole, (req,res,ne
 })
 
 //consulta login para inicio de sesion con validacion
-router.post('/login', (req, res) => {
+/* router.post('/login', (req, res) => {
     const user = req.body
     query = "select email,name,password,role,status from usuarios where email=?";
     connection.query(query, [user.email], (err, results) => {
+        if (!err) {
+            if (results.length <= 0 || results[0].password != user.password) {
+                return res.status(401).json({ message: "Incorrect Username or Password " });
+            }
+            else if (results[0].status === 'false') {
+                return res.status(401).json({ message: "Wait for admin approval" });
+            }
+
+            else if (results[0].password == user.password) {
+                const response = { email: results[0].email, role: results[0].role }
+                const accessToken = jwt.sign(response, process.env.ACCESS_TOKEN, { expiresIn: '8hr' })
+                res.status(200).json({ token: accessToken });
+            }
+            else {
+                return res.status(400).json({ message: "Something went wrong. Please try again exist." });
+            }
+        }
+        else {
+            return res.status(500).json(err);
+        }
+    })
+
+})
+*/
+
+router.post('/login', (req, res) => {
+    const user = req.body
+    const query = "select email,name,password,role,status from usuarios where email=?";
+    pool.query(query, [user.email], (err, results) => {
         if (!err) {
             if (results.length <= 0 || results[0].password != user.password) {
                 return res.status(401).json({ message: "Incorrect Username or Password " });
@@ -120,8 +170,8 @@ var transporter = nodemailer.createTransport({
 
 router.post('/forgotpassword', (req, res) => {
     const user = req.body;
-    query = "select email,password from usuarios where email=?";
-    connection.query(query, [user.email], (err, results) => {
+    const query = "select email,password from usuarios where email=?";
+    pool.query(query, [user.email], (err, results) => {
         if (!err) {
 
             if (results.length <= 0) {
@@ -153,7 +203,7 @@ router.post('/forgotpassword', (req, res) => {
         }
     })
 })
-
+/*
 router.get('/get', auth.authenticationToken, checkRole.checkRole, (req, res) => {
     var query = "select u.userId,u.name,u.email,u.role,u.status,a.name as area from usuarios u inner join area a on u.areaId= a.areaId";
     connection.query(query, (err, results) => {
@@ -165,6 +215,17 @@ router.get('/get', auth.authenticationToken, checkRole.checkRole, (req, res) => 
         }
     })
 })
+*/
+
+router.get('/get', auth.authenticationToken, checkRole.checkRole, (req, res) => {
+    const query = "select u.userId,u.name,u.email,u.role,u.status,a.name as area from usuarios u inner join area a on u.areaId= a.areaId";
+    pool.query(query, (err, results) => {
+        if (err) {
+            return res.status(500).json(err);
+        }
+        return res.status(200).json(results);
+    });
+});
 
 
 router.get('/checkToken', auth.authenticationToken, (req, res) => {
@@ -174,8 +235,8 @@ router.get('/checkToken', auth.authenticationToken, (req, res) => {
 router.post('/changePassword', auth.authenticationToken, (req, res) => {
     const user = req.body;
     const email = res.locals.email;
-    var query = "select * from usuarios where email=? and password=?";
-    connection.query(query, [email, user.oldPassword], (err, results) => {
+    const query = "select * from usuarios where email=? and password=?";
+    pool.query(query, [email, user.oldPassword], (err, results) => {
 
         if (!err) {
             if (results.length <= 0) {
@@ -206,8 +267,8 @@ router.post('/changePassword', auth.authenticationToken, (req, res) => {
 
 router.delete('/delete/:userId', auth.authenticationToken, checkRole.checkRole, (req, res, next) => {
     const id = req.params.userId;
-    var query = "delete from usuarios where userId=?";
-    connection.query(query, [id], (err, results) => {
+    const query = "delete from usuarios where userId=?";
+    pool.query(query, [id], (err, results) => {
         if (!err) {
             if (results.affectedRows == 0) {
                 return res.status(404).json({ message: "User id does not found " });
@@ -224,7 +285,7 @@ router.delete('/delete/:userId', auth.authenticationToken, checkRole.checkRole, 
 router.patch('/updateStatus', auth.authenticationToken, checkRole.checkRole, (req, res, next) => {
     let user = req.body;
     var query = "update usuarios set status=? where userId=?";
-    connection.query(query, [user.status, user.userId], (err, results) => {
+    pool.query(query, [user.status, user.userId], (err, results) => {
         if (!err) {
             if (results.affetedRows == 0) {
                 return res.status(404).json({ message: "User id does not found" });

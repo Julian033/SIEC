@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AreaService {
-  url = 'http://localhost:8080';
+  url = 'https://siec-production.up.railway.app';
 
 
   constructor(private httpClient:HttpClient) { }

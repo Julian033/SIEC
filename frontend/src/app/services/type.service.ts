@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class TypeService {
 
-  url = 'https://siec-production.up.railway.app';
+  url = 'https://cmi.tabascoweb.com';
   constructor(private httpClient:HttpClient) { }
 
   add(data:any){

@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AreaService {
-  url = 'https://siec-production.up.railway.app';
+  url = 'https://cmi.tabascoweb.com';
 
 
   constructor(private httpClient:HttpClient) { }

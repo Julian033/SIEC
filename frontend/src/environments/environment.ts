@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://siec-production.up.railway.app'
+  apiUrl: 'https://cmi.tabascoweb.com/'
 };

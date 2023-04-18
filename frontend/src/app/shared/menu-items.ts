@@ -8,11 +8,11 @@ export interface Menu{
 }
 
 const MENUITEMS = [
-    {state:'dashboard',name:'Dashboard',icon:'dashboard',role:''},
-    {state:'equipment',name:'Equipment',icon:'inventory_2',role:'admin'},
-    {state:'area',name:'View Area',icon:'category',role:'admin'},
-    {state:'type',name:'View Type',icon:'list_alt',role:'admin'},
-    {state:'user',name:'View Users',icon:'people',role:'admin'}
+    {state:'dashboard',name:'Panel Principal',icon:'dashboard',role:''},
+    {state:'equipment',name:'Equipos',icon:'inventory_2',role:'admin'},
+    {state:'area',name:'Ver Areas',icon:'category',role:'admin'},
+    {state:'type',name:'Ver Tipos de Equipos',icon:'list_alt',role:'admin'},
+    {state:'user',name:'Ver Usuarios',icon:'people',role:'admin'}
 ];
 
 @Injectable()

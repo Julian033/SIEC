@@ -61,7 +61,7 @@ export class ManageUserComponent implements OnInit {
   handleAddAction(){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      action:'Add'
+      action:'Agregar'
     }
     dialogConfig.width = "850px";
     const dialogRef = this.dialog.open(UserComponent,dialogConfig);
@@ -78,7 +78,7 @@ export class ManageUserComponent implements OnInit {
   handleEditAction(values:any){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      action:'Edit',
+      action:'Editar',
       data:values
     }
     dialogConfig.width = "850px";
@@ -97,7 +97,7 @@ export class ManageUserComponent implements OnInit {
   handleDeleteAction(values:any){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data={
-      message:'Delete '+values.name+ ' '
+      message:'Eliminar '+values.name+ ' '
     };
     const dialogRef = this.dialog.open(ConfirmationComponent,dialogConfig);
     const sub = dialogRef.componentInstance.onEmitStatusChange.subscribe((response)=>{

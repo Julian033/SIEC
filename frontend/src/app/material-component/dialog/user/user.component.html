@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
     <mat-toolbar-row fxLayout="row">
-        <span class="title-center">{{dialogData.action}} User</span>
+        <span class="title-center">{{dialogData.action}} Usuario</span>
     </mat-toolbar-row>
 </mat-toolbar>
 
@@ -9,11 +9,11 @@
         <div fxFlex fxLayout="column">
             <div fxLayout="row wrap">
                 <mat-form-field appearance="fill" fxFlex>
-                    <mat-label>Name</mat-label>
+                    <mat-label>Nombre</mat-label>
                     <input matInput formControlName="name" required>
                     <mat-error *ngIf="userForm.controls.name.touched && userForm.controls.name.invalid">
-                        <span *ngIf="userForm.controls.name.errors.required">This field is mandatory.</span>
-                        <span *ngIf="userForm.controls.name.errors.pattern">This field is invalid.</span>
+                        <span *ngIf="userForm.controls.status.errors.required">Este campo es obligatorio.</span>
+                        <span *ngIf="userForm.controls.status.errors.pattern">Este campo no es valido.</span>
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -21,22 +21,22 @@
             
             <div fxLayout="row wrap">
                 <mat-form-field appearance="fill" fxFlex>
-                    <mat-label>Email</mat-label>
+                    <mat-label>Correo</mat-label>
                     <input matInput formControlName="email" required>
                     <mat-error *ngIf="userForm.controls.email.touched && userForm.controls.email.invalid">
-                        <span *ngIf="userForm.controls.email.errors.required">This field is mandatory.</span>
-                        <span *ngIf="userForm.controls.email.errors.pattern">This field is invalid.</span>
+                        <span *ngIf="userForm.controls.status.errors.required">Este campo es obligatorio.</span>
+                        <span *ngIf="userForm.controls.status.errors.pattern">Este campo no es valido.</span>
                     </mat-error>
                 </mat-form-field>
             </div>
 
             <div fxLayout="row wrap">
                 <mat-form-field appearance="fill" fxFlex>
-                    <mat-label>Password</mat-label>
+                    <mat-label>Contraseña</mat-label>
                     <input matInput formControlName="password" type="password" required>
                     <mat-error *ngIf="userForm.controls.password.touched && userForm.controls.password.invalid">
-                        <span *ngIf="userForm.controls.password.errors.required">This field is mandatory.</span>
-                        <span *ngIf="userForm.controls.password.errors.pattern">This field is invalid.</span>
+                        <span *ngIf="userForm.controls.status.errors.required">Este campo es obligatorio.</span>
+                        <span *ngIf="userForm.controls.status.errors.pattern">Este campo no es valido.</span>
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -44,14 +44,14 @@
             
             <div fxLayout="row wrap">
                 <mat-form-field appearance="fill" fxFlex>
-                    <mat-label>Role</mat-label>
+                    <mat-label>Rol</mat-label>
                     <mat-select formControlName="role" required>
                         <mat-option value="admin">Administrador</mat-option>
                         <mat-option value="user">Usuario</mat-option>
                     </mat-select>
                     <mat-error *ngIf="userForm.controls.role.touched && userForm.controls.role.invalid">
-                        <span *ngIf="userForm.controls.role.errors.required">This field is mandatory.</span>
-                        <span *ngIf="userForm.controls.role.errors.pattern">This field is invalid.</span>
+                        <span *ngIf="userForm.controls.status.errors.required">Este campo es obligatorio.</span>
+                        <span *ngIf="userForm.controls.status.errors.pattern">Este campo no es valido.</span>
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -65,8 +65,8 @@
                         <mat-option value="false">No Activo</mat-option>
                     </mat-select>
                     <mat-error *ngIf="userForm.controls.status.touched && userForm.controls.status.invalid">
-                        <span *ngIf="userForm.controls.status.errors.required">This field is mandatory.</span>
-                        <span *ngIf="userForm.controls.status.errors.pattern">This field is invalid.</span>
+                        <span *ngIf="userForm.controls.status.errors.required">Este campo es obligatorio.</span>
+                        <span *ngIf="userForm.controls.status.errors.pattern">Este campo no es valido.</span>
                     </mat-error>
                 </mat-form-field>
                 
@@ -84,6 +84,6 @@
 </mat-dialog-content>
 <mat-dialog-actions align="center">
     <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()" [disabled]="!(userForm.valid && userForm.dirty)">{{action}}</button>
-    <button mat-raised-button color ="primary" mat-dialog-close>Close</button>
+    <button mat-raised-button color ="primary" mat-dialog-close>Cerrar</button>
 </mat-dialog-actions>
 

@@ -11,7 +11,7 @@ router.post('/add', auth.authenticationToken, checkRole.checkRole, (req, res, ne
         if (err) return res.status(500).json(err);
 
         if (results.length > 0) {
-            return res.status(409).json({ message: "The equipment already exists in the database." });
+            return res.status(409).json({ message: "El equipo ya existe." });
         }
 
         // Si el equipo no existe, se puede proceder con la inserción
@@ -32,7 +32,7 @@ router.post('/add', auth.authenticationToken, checkRole.checkRole, (req, res, ne
                 pool.query(query, [equipoId, equipo.brand, equipo.model, equipo.processor, equipo.generation, equipo.ram, equipo.hddssd, equipo.connection, equipo.nodetype, equipo.bandwidth, equipo.warranty], (err, result) => {
                     if (err) return res.status(500).json(err);
 
-                    return res.status(200).json({ message: "Equipment, Hardware, and Software added successfully." });
+                    return res.status(200).json({ message: "Equipo, Hardware y Software agregados exitosamente." });
                 });
             });
         });
@@ -58,9 +58,9 @@ router.patch('/update', auth.authenticationToken, checkRole.checkRole, (req, res
     pool.query(query, [equipo.sn, equipo.inventory, equipo.monitor, equipo.keyboard,equipo.guard, equipo.typeId, equipo.areaId, equipo.brand, equipo.model, equipo.processor, equipo.generation, equipo.ram, equipo.hddssd, equipo.connection, equipo.nodetype, equipo.bandwidth, equipo.warranty, equipo.antivirus, equipo.office, equipo.systemo, equipo.equipoId], (err, results) => {
         if (!err) {
             if (results.affectedRows == 0) {
-                return res.status(404).json({ message: "Equipment Id does not found" });
+                return res.status(404).json({ message: "No se encuentra el ID" });
             }
-            return res.status(200).json({ message: "Equipment Update Sucessfully" });
+            return res.status(200).json({ message: "Equipo actualizado exitosamente" });
         }
         else {
             return res.status(500).json(err);
@@ -74,9 +74,9 @@ router.patch('/updateStatus', auth.authenticationToken, checkRole.checkRole, (re
     pool.query(query, [user.status, user.equipoId], (err, results) => {
         if (!err) {
             if (results.affetedRows == 0) {
-                return res.status(404).json({ message: "Equipment id does not found" });
+                return res.status(404).json({ message: "No se encuentra el ID del equipo" });
             }
-            return res.status(200).json({ message: "Equipment Status Updated Successfully" });
+            return res.status(200).json({ message: "El estatus del equipo se actualizo exitosamente" });
         }
         else {
             return res.status(500).json(err);
@@ -90,9 +90,9 @@ router.delete('/delete/:equipoId', auth.authenticationToken, checkRole.checkRole
     pool.query(query, [id], (err, results) => {
         if (!err) {
             if (results.affectedRows == 0) {
-                return res.status(404).json({ message: "Equipment id does not found " });
+                return res.status(404).json({ message: "No se encuentra el ID del equipo " });
             }
-            return res.status(200).json({ message: "Equipment Delete Successfully" })
+            return res.status(200).json({ message: "Equipo eliminado exitosamente" })
         }
         else {
             return res.status(500).json(err);

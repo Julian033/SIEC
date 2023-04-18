@@ -14,7 +14,7 @@ router.post('/add',auth.authenticationToken,checkRole.checkRole,(req,res,next)=>
                 const query = "insert into area (name) values(?)";
                 pool.query(query,[area.name],(err,results)=>{
                 if(!err){
-                    return res.status(200).json({message: "Area Add Successfully."});
+                    return res.status(200).json({message: "Area agregada exitosamente."});
                 }
                 else{
                     return res.status(500).json(err);
@@ -23,7 +23,7 @@ router.post('/add',auth.authenticationToken,checkRole.checkRole,(req,res,next)=>
 
             }
             else {
-                return res.status(400).json({message:"Area Already Exist"})
+                return res.status(400).json({message:"El area ya existe"})
             }
         }
         else{
@@ -54,9 +54,9 @@ router.patch('/update',auth.authenticationToken,checkRole.checkRole, (req,res,ne
     pool.query(query,[area.name,area.areaId],(err,results)=>{
         if(!err){
             if(results.affectedRows == 0){
-                return res.status(404).json({message: "Area Id does not found"});
+                return res.status(404).json({message: "ID de area no encontrado"});
             }
-            return res.status(200).json({message: "Area Update Sucessfully"});
+            return res.status(200).json({message: "Actualización de área con éxito"});
         }
         else{
             return res.status(500).json(err);
@@ -70,9 +70,9 @@ router.delete('/delete/:areaId',auth.authenticationToken,checkRole.checkRole,(re
     pool.query(query,[id],(err,results)=>{
         if(!err){
             if(results.affectedRows == 0 ){
-                return res.status(404).json({message:"Area id does not found "});
+                return res.status(404).json({message:"ID de area no encontrado "});
             }
-            return res.status(200).json({message:"Area Delete Successfully"})
+            return res.status(200).json({message:"Area eliminada exitosamente"})
         }
         else{
             return res.status(500).json(err);

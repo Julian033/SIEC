@@ -9,10 +9,10 @@
         <div fxFlex fxLayout="column">
             <div fxFlex fxLayout="row wrap">
             <mat-form-field appearance="fill" fxFlex>
-                <mat-label>Name</mat-label>
+                <mat-label>Nombre</mat-label>
                 <input matInput formControlName="name" required>
                 <mat-error *ngIf="areaForm.controls.name.touched && areaForm.controls.name.invalid">
-                    <span *ngIf="areaForm.controls.name.errors.required ">This field is mandatory.</span>
+                    <span *ngIf="areaForm.controls.name.errors.required ">Este campo es obligatorio.</span>
                 </mat-error>
             </mat-form-field>
         </div>
@@ -23,5 +23,5 @@
 <mat-dialog-actions align="center">
     <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()" 
     [disabled]="!(areaForm.valid && areaForm.dirty)">{{action}}</button>
-    <button mat-raised-button color="primary" mat-dialog-close>Close</button>
+    <button mat-raised-button color="primary" mat-dialog-close>Cerrar</button>
 </mat-dialog-actions>

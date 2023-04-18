@@ -14,8 +14,8 @@ export class TypeComponent implements OnInit {
   onAddType = new EventEmitter();
   onEditType = new EventEmitter();
   typeForm:any = FormGroup;
-  dialogAction:any = "Add";
-  action:any = "Add";
+  dialogAction:any = "Agregar";
+  action:any = "Agregar";
   responseMessage:any;
 
   constructor(@Inject(MAT_DIALOG_DATA) public dialogData:any,
@@ -28,15 +28,15 @@ export class TypeComponent implements OnInit {
     this.typeForm = this.formBuilder.group({
       name:[null,[Validators.required]]
     });
-    if(this.dialogData.action === 'Edit'){
-      this.dialogAction = "Edit";
-      this.action = "Update";
+    if(this.dialogData.action === 'Editar'){
+      this.dialogAction = "Editar";
+      this.action = "Modificar";
       this.typeForm.patchValue(this.dialogData.data);
     }
   }
 
   handleSubmit(){
-    if(this.dialogAction === "Edit"){
+    if(this.dialogAction === "Editar"){
       this.edit();
     }
     else{

@@ -19,7 +19,7 @@ export class AppHeaderComponent {
   logout() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      message: 'Logout'
+      message: 'Salir'
     };
     const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
     const sub = dialogRef.componentInstance.onEmitStatusChange.subscribe((user) => {

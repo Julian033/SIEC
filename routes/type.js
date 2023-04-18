@@ -15,7 +15,7 @@ router.post('/add',auth.authenticationToken,checkRole.checkRole,(req,res,next)=>
                const query = "insert into type (name) values(?)";
                 pool.query(query,[equipo.name],(err,results)=>{
                 if(!err){
-                    return res.status(200).json({message: "Type Equipment Add Successfully."});
+                    return res.status(200).json({message: "Tipo de equipo agregado con exito."});
                 }
                 else{
                     return res.status(500).json(err);
@@ -24,7 +24,7 @@ router.post('/add',auth.authenticationToken,checkRole.checkRole,(req,res,next)=>
 
             }
             else {
-                return res.status(400).json({message:"Type Equipment Already Exist"})
+                return res.status(400).json({message:"El tipo de equipo ya existe"})
             }
         }
         else{
@@ -54,9 +54,9 @@ router.patch('/update',auth.authenticationToken,checkRole.checkRole, (req,res,ne
     pool.query(query,[equipo.name,equipo .typeId],(err,results)=>{
         if(!err){
             if(results.affectedRows == 0){
-                return res.status(404).json({message: "Type Id does not found"});
+                return res.status(404).json({message: "ID no encontrado"});
             }
-            return res.status(200).json({message: "Type Update Sucessfully"});
+            return res.status(200).json({message: "Se ha modificado correctamente"});
         }
         else{
             return res.status(500).json(err);
@@ -71,9 +71,9 @@ router.delete('/delete/:typeId',auth.authenticationToken,checkRole.checkRole,(re
     pool.query(query,[id],(err,results)=>{
         if(!err){
             if(results.affectedRows == 0 ){
-                return res.status(404).json({message:"Type id does not found "});
+                return res.status(404).json({message:"ID no encontrado "});
             }
-            return res.status(200).json({message:"Type Delete Successfully"})
+            return res.status(200).json({message:"Eliminado Exitosamente"})
         }
         else{
             return res.status(500).json(err);

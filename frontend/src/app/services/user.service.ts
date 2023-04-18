@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class UserService {
-  url = 'https://cmi.tabascoweb.com/';
+  url = 'https://cmi.tabascoweb.com';
 
   constructor(private httpClient: HttpClient) { }
 

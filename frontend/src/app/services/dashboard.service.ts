@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class DashboardService {
   
-  url = 'hhttps://cmi.tabascoweb.com/';
+  url = 'hhttps://cmi.tabascoweb.com';
   constructor(private httpClient:HttpClient) { }
 
 

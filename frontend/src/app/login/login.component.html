@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
     <mat-toolbar-row fxLayout="row">
 
-        <span class="title-center">Login</span>
+        <span class="title-center">Inicio de Sesion</span>
     </mat-toolbar-row>
 </mat-toolbar>
 
@@ -10,20 +10,20 @@
         <div fxFlex fxLayout="column.">
 
             <mat-form-field appearance="fill" fxFlex>
-                <mat-label>Email</mat-label>
+                <mat-label>Correo</mat-label>
                 <input matInput formControlName="email" required>
                 <mat-error *ngIf="loginForm.controls.email.touched && loginForm.controls.email.invalid">
-                    <span *ngIf="loginForm.controls.email.errors.required">This field is mandatory</span>
-                    <span *ngIf="loginForm.controls.email.errors.pattern">This field is invalid.</span>
+                    <span *ngIf="loginForm.controls.email.errors.required">Este campo es obligatorio</span>
+                    <span *ngIf="loginForm.controls.email.errors.pattern">Este campo no es valido.</span>
                 </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill" fxFlex>
-                <mat-label>Password</mat-label>
+                <mat-label>Contraseña</mat-label>
                 <input matInput formControlName="password" type="password" required>
                 <mat-error *ngIf="loginForm.controls.password.touched && loginForm.controls.password.invalid">
-                    <span *ngIf="loginForm.controls.password.errors.required">This field is mandatory</span>
-                    <span *ngIf="loginForm.controls.password.errors.pattern">This field is invalid.</span>
+                    <span *ngIf="loginForm.controls.password.errors.required">Este campo es obligatorio</span>
+                    <span *ngIf="loginForm.controls.password.errors.pattern">Este campo no es valido.</span>
                 </mat-error>
             </mat-form-field>
         </div>
@@ -33,6 +33,6 @@
 
 <mat-dialog-actions align="center">
     <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()"
-    [disabled]="!(loginForm.valid && loginForm.dirty)">Login</button>
-    <button mat-raised-button color="primary" mat-dialog-close>Close</button>
+    [disabled]="!(loginForm.valid && loginForm.dirty)">Iniciar Sesion</button>
+    <button mat-raised-button color="primary" mat-dialog-close>Cerrar</button>
 </mat-dialog-actions>

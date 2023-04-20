@@ -60,7 +60,7 @@ export class ManageEquipmentComponent implements OnInit {
   handleAddAction(){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      action: 'Add'
+      action: 'Agregar'
      }
      dialogConfig.width = "850px";
      const dialogRef = this.dialog.open(EquipmentComponent,dialogConfig);
@@ -79,7 +79,7 @@ export class ManageEquipmentComponent implements OnInit {
   handleEditAction(value:any){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      action: 'Edit',
+      action: 'Editar',
       data:value
      
      }
@@ -98,7 +98,7 @@ export class ManageEquipmentComponent implements OnInit {
   handleDeleteAction(values:any){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      message: 'delete ' + values.sn
+      message: 'Eliminar ' + values.sn
     };
     const dialogRef = this.dialog.open(ConfirmationComponent,dialogConfig);
     const sub = dialogRef.componentInstance.onEmitStatusChange.subscribe((response)=>{

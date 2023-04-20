@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class TypeService {
 
-  url = 'http://localhost:8080';
+  url = environment.apiUrl;
   constructor(private httpClient:HttpClient) { }
 
   add(data:any){

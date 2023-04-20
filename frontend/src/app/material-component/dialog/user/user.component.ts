@@ -15,8 +15,8 @@ export class UserComponent implements OnInit {
   onAddUser = new EventEmitter();
   onEditUser = new EventEmitter();
   userForm:any = FormGroup;
-  dialogAction:any ="Add";
-  action:any = "Add";
+  dialogAction:any ="Agregar";
+  action:any = "Agregar";
   responseMessage:any;
   areas:any = [];
 
@@ -37,9 +37,9 @@ export class UserComponent implements OnInit {
       areaId:[null,Validators.required],
 
     })
-    if(this.dialogData.action === 'Edit'){
-      this.dialogAction = "Edit";
-      this.action = "Update";
+    if(this.dialogData.action === 'Editar'){
+      this.dialogAction = "Editar";
+      this.action = "Modificar";
       this.userForm.patchValue(this.dialogData.data);
     }
     this.getArea();
@@ -60,7 +60,7 @@ export class UserComponent implements OnInit {
   }
 
   handleSubmit(){
-    if(this.dialogAction === 'Edit'){
+    if(this.dialogAction === 'Editar'){
       this.edit();
     }
     else{

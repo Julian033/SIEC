@@ -6,7 +6,8 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class DashboardService {
-  url = 'http://localhost:8080';
+  
+  url = environment.apiUrl;
   constructor(private httpClient:HttpClient) { }
 
 

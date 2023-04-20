@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class EquipoService {
-url = 'http://localhost:8080';
+  url = environment.apiUrl;
 
   constructor(private httpClient:HttpClient) { }
 

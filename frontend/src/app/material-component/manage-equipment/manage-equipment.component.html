@@ -1,12 +1,12 @@
 <mat-card>
-    <b><span>Manage Equipment</span></b>
-    <button mat-flat-button color="primary" class="float-right" (click)="handleAddAction()"> Add</button>
+    <b><span>Administrar Equipos</span></b>
+    <button mat-flat-button color="primary" class="float-right" (click)="handleAddAction()"> Añadir Equipo</button>
 </mat-card>
 
 <hr>
 <mat-card>
     <mat-form-field appearance="fill">
-        <mat-label>Filter</mat-label>
+        <mat-label>Filtrar</mat-label>
         <input matInput (keyup)="applyFilter($event)" #input>
 
     </mat-form-field>
@@ -57,7 +57,7 @@
 
 
         <ng-container matColumnDef="edit">
-            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <th mat-header-cell *matHeaderCellDef>Acción</th>
             <th mat-cell *matCellDef="let element" class="action-link">
                 <button mat-icon-button color="primary" matTooltip="Edit" (click)="handleEditAction(element)"> 
                     <mat-icon>edit</mat-icon>
@@ -65,7 +65,7 @@
                 <button mat-icon-button color="primary" matTooltip="Delete" (click)="handleDeleteAction(element)"> 
                     <mat-icon>delete</mat-icon>
                 </button>
-                <mat-slide-toggle (change)="onChange($event.checked,element.equipoId)" matTooltip="Activate o Desactivate Equipment" [checked]="element.status"></mat-slide-toggle>
+                <mat-slide-toggle (change)="onChange($event.checked,element.equipoId)" matTooltip="Activar o Desactivar Equipo" [checked]="element.status"></mat-slide-toggle>
             </th>
         </ng-container>
         

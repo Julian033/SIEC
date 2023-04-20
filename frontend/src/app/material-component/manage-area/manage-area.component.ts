@@ -61,7 +61,7 @@ export class ManageAreaComponent implements OnInit {
   handleAddAction(){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      action: 'Add'
+      action: 'Agregar'
     }
     dialogConfig.width = "850px";
     const dialogRef = this.dialog.open(AreaComponent,dialogConfig);
@@ -78,7 +78,7 @@ export class ManageAreaComponent implements OnInit {
   handleEditAction(values:any){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      action: 'Edit',
+      action: 'Editar',
       data:values
     }
     dialogConfig.width = "850px";
@@ -96,7 +96,7 @@ export class ManageAreaComponent implements OnInit {
   handleDeleteAction(values:any){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data={
-      message:'delete '+values.name+ ''
+      message:'Eliminar '+values.name+ ''
     };
     const dialogRef = this.dialog.open(ConfirmationComponent,dialogConfig);
     const sub = dialogRef.componentInstance.onEmitStatusChange.subscribe((response)=>{

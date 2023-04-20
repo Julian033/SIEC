@@ -1,6 +1,7 @@
 const express = require('express');
-const connection = require('../connection');
+const pool = require('../connection');
 const router = express.Router();
+
 
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
@@ -10,14 +11,14 @@ var checkRole = require('../services/checkRole');
 
 router.post('/add', (req, res) => {
     let user = req.body;
-    query = "select email,password,name,role,status,areaId from usuarios where email=?";
-    connection.query(query, [user.email], (err, results) => {
+    const query = "select email,password,name,role,status,areaId from usuarios where email=?";
+    pool.query(query, [user.email], (err, results) => {
         if (!err) {
             if (results.length <= 0) {
                 query = "insert into usuarios (name,password,email,role,status,areaId) values (?,?,?,?,?,?)";
                 connection.query(query, [user.name, user.password, user.email,user.role,user.status,user.areaId], (err, results) => {
                     if (!err) {
-                        return res.status(200).json({ message: "Successfully Registered" });
+                        return res.status(200).json({ message: "Registrado Exitosamente" });
                     }
 
                     else {
@@ -26,7 +27,7 @@ router.post('/add', (req, res) => {
                 })
             }
             else {
-                return res.status(400).json({ message: "Email Already Exist." });
+                return res.status(400).json({ message: "El correo ingresado ya existe." });
             }
         }
         else {
@@ -35,44 +36,34 @@ router.post('/add', (req, res) => {
     })
 })
 
-//consulta para registros
-router.post('/signup', (req, res) => {
+router.post('/signup', async (req, res) => {
     let user = req.body;
-    query = "select email,password,name,role,status,areaId from usuarios where email=?";
-    connection.query(query, [user.email], (err, results) => {
-        if (!err) {
-            if (results.length <= 0) {
-                query = "insert into usuarios (name,password,email,role,status,areaId) values (?,?,?,'user','false','1')";
-                connection.query(query, [user.name, user.password, user.email], (err, results) => {
-                    if (!err) {
-                        return res.status(200).json({ message: "Successfully Registered" });
-                    }
-
-                    else {
-                        return res.status(500).json(err);
-                    }
-                })
-            }
-            else {
-                return res.status(400).json({ message: "Email Already Exist." });
-            }
+    const connection = await pool.getConnection();
+    try {
+        const [rows] = await connection.execute("SELECT email, password, name, role, status, areaId FROM usuarios WHERE email = ?", [user.email]);
+        if (rows.length <= 0) {
+            const [result] = await connection.execute("INSERT INTO usuarios (name, password, email, role, status, areaId) VALUES (?, ?, ?, 'user', 'false', '1')", [user.name, user.password, user.email]);
+            return res.status(200).json({ message: "Registrado Exitosamente" });
+        } else {
+            return res.status(400).json({ message: "El correo ingresado ya existe." });
         }
-        else {
-            return res.status(500).json(err);
-        }
-    })
-})
+    } catch (error) {
+        return res.status(500).json(error);
+    } finally {
+        connection.release();
+    }
+});
 
 router.patch('/update',auth.authenticationToken,checkRole.checkRole, (req,res,next)=>{
     let area = req.body;
     console.log(area);
-    var query = "update usuarios set name=?,email=?,password=?,role=?,status=?,areaId=? where userId=?";
-    connection.query(query,[area.name,area.email,area.password,area.role,area.status,area.areaId,area.userId],(err,results)=>{
+    const query = "update usuarios set name=?,email=?,password=?,role=?,status=?,areaId=? where userId=?";
+    pool.query(query,[area.name,area.email,area.password,area.role,area.status,area.areaId,area.userId],(err,results)=>{
         if(!err){
             if(results.affectedRows == 0){
-                return res.status(404).json({message: "User Id does not found"});
+                return res.status(404).json({message: "Usuario no encontrado"});
             }
-            return res.status(200).json({message: "User Update Sucessfully"});
+            return res.status(200).json({message: "Actualización de usuario correctamente"});
         }
         else{
             return res.status(500).json(err);
@@ -80,17 +71,16 @@ router.patch('/update',auth.authenticationToken,checkRole.checkRole, (req,res,ne
     })
 })
 
-//consulta login para inicio de sesion con validacion
 router.post('/login', (req, res) => {
     const user = req.body
-    query = "select email,name,password,role,status from usuarios where email=?";
-    connection.query(query, [user.email], (err, results) => {
+    const query = "select email,name,password,role,status from usuarios where email=?";
+    pool.query(query, [user.email], (err, results) => {
         if (!err) {
             if (results.length <= 0 || results[0].password != user.password) {
-                return res.status(401).json({ message: "Incorrect Username or Password " });
+                return res.status(401).json({ message: "Usuario o contraseña incorrectos " });
             }
             else if (results[0].status === 'false') {
-                return res.status(401).json({ message: "Wait for admin approval" });
+                return res.status(401).json({ message: "Espere la aprobación del administrador" });
             }
 
             else if (results[0].password == user.password) {
@@ -99,7 +89,7 @@ router.post('/login', (req, res) => {
                 res.status(200).json({ token: accessToken });
             }
             else {
-                return res.status(400).json({ message: "Something went wrong. Please try again exist." });
+                return res.status(400).json({ message: "Algo salió mal. Inténtalo de nuevo." });
             }
         }
         else {
@@ -120,12 +110,12 @@ var transporter = nodemailer.createTransport({
 
 router.post('/forgotpassword', (req, res) => {
     const user = req.body;
-    query = "select email,password from usuarios where email=?";
-    connection.query(query, [user.email], (err, results) => {
+    const query = "select email,password from usuarios where email=?";
+    pool.query(query, [user.email], (err, results) => {
         if (!err) {
 
             if (results.length <= 0) {
-                return res.status(200).json({ message: "Password sent successfully to your email. " });
+                return res.status(200).json({ message: "Contraseña enviada con éxito. " });
             }
             else {
                 var mailOptions = {
@@ -143,7 +133,7 @@ router.post('/forgotpassword', (req, res) => {
                         console.log('Email sent: ' + info.response);
                     }
                 });
-                return res.status(200).json({ message: "Password sent successfully to your email. " });
+                return res.status(200).json({ message: "Contraseña enviada con éxito. " });
 
             }
         }
@@ -153,7 +143,7 @@ router.post('/forgotpassword', (req, res) => {
         }
     })
 })
-
+/*
 router.get('/get', auth.authenticationToken, checkRole.checkRole, (req, res) => {
     var query = "select u.userId,u.name,u.email,u.role,u.status,a.name as area from usuarios u inner join area a on u.areaId= a.areaId";
     connection.query(query, (err, results) => {
@@ -165,6 +155,17 @@ router.get('/get', auth.authenticationToken, checkRole.checkRole, (req, res) => 
         }
     })
 })
+*/
+
+router.get('/get', auth.authenticationToken, checkRole.checkRole, (req, res) => {
+    const query = "select u.userId,u.name,u.email,u.role,u.status,a.name as area from usuarios u inner join area a on u.areaId= a.areaId";
+    pool.query(query, (err, results) => {
+        if (err) {
+            return res.status(500).json(err);
+        }
+        return res.status(200).json(results);
+    });
+});
 
 
 router.get('/checkToken', auth.authenticationToken, (req, res) => {
@@ -174,20 +175,20 @@ router.get('/checkToken', auth.authenticationToken, (req, res) => {
 router.post('/changePassword', auth.authenticationToken, (req, res) => {
     const user = req.body;
     const email = res.locals.email;
-    var query = "select * from usuarios where email=? and password=?";
-    connection.query(query, [email, user.oldPassword], (err, results) => {
+    const query = "select * from usuarios where email=? and password=?";
+    pool.query(query, [email, user.oldPassword], (err, results) => {
 
         if (!err) {
             if (results.length <= 0) {
                 
-                return res.status(400).json({ message: "Incorrect Old Password" });
+                return res.status(400).json({ message: "Contraseña antigua incorrecta" });
 
             }
             else if (results[0].password == user.oldPassword) {
                 query = "update usuarios set password=? where email=?";
                 connection.query(query, [user.newPassword, email], (err, results) => {
                     if (!err) {
-                        return res.status(200).json({ message: "Password Updated Successfully." })
+                        return res.status(200).json({ message: "Contraseña actualizada exitosamente." })
                     }
                     else {
                         return res.status(500).json(err);
@@ -195,7 +196,7 @@ router.post('/changePassword', auth.authenticationToken, (req, res) => {
                 })
             }
             else {
-                return res.status(400).json({ message: "Something went wrong. Please try again later" });
+                return res.status(400).json({ message: "Algo salió mal. Por favor, inténtelo de nuevo más tarde" });
             }
         }
         else {
@@ -206,13 +207,13 @@ router.post('/changePassword', auth.authenticationToken, (req, res) => {
 
 router.delete('/delete/:userId', auth.authenticationToken, checkRole.checkRole, (req, res, next) => {
     const id = req.params.userId;
-    var query = "delete from usuarios where userId=?";
-    connection.query(query, [id], (err, results) => {
+    const query = "delete from usuarios where userId=?";
+    pool.query(query, [id], (err, results) => {
         if (!err) {
             if (results.affectedRows == 0) {
-                return res.status(404).json({ message: "User id does not found " });
+                return res.status(404).json({ message: "ID de usuario no encontrado " });
             }
-            return res.status(200).json({ message: "User Delete Successfully" })
+            return res.status(200).json({ message: "Usuario eliminado con exito" })
         }
         else {
             return res.status(500).json(err);
@@ -224,12 +225,12 @@ router.delete('/delete/:userId', auth.authenticationToken, checkRole.checkRole, 
 router.patch('/updateStatus', auth.authenticationToken, checkRole.checkRole, (req, res, next) => {
     let user = req.body;
     var query = "update usuarios set status=? where userId=?";
-    connection.query(query, [user.status, user.userId], (err, results) => {
+    pool.query(query, [user.status, user.userId], (err, results) => {
         if (!err) {
             if (results.affetedRows == 0) {
-                return res.status(404).json({ message: "User id does not found" });
+                return res.status(404).json({ message: "ID de usuario no encontrado" });
             }
-            return res.status(200).json({ message: "User Status Updated Successfully" });
+            return res.status(200).json({ message: "Estado de usuario actualizado con éxito" });
         }
         else {
             return res.status(500).json(err);

@@ -16,8 +16,8 @@ export class EquipmentComponent implements OnInit {
   onAddEquipment = new EventEmitter();
   onEditEquipment = new EventEmitter();
   equipmentForm:any = FormGroup;
-  dialogAction:any = "Add";
-  action:any = "Add";
+  dialogAction:any = "Agregar";
+  action:any = "Agregar";
   responseMessage:any;
   areas:any = [];
   types:any = [];
@@ -55,9 +55,9 @@ export class EquipmentComponent implements OnInit {
       areaId:[null,Validators.required],
     })
 
-    if(this.dialogData.action === 'Edit'){
-      this.dialogAction = "Edit";
-      this.action = "Update";
+    if(this.dialogData.action === 'Editar'){
+      this.dialogAction = "Editar";
+      this.action = "Modificar";
       this.equipmentForm.patchValue(this.dialogData.data);
 
     }
@@ -98,7 +98,7 @@ export class EquipmentComponent implements OnInit {
  
  
   handleSubmit(){
-    if(this.dialogAction === 'Edit'){
+    if(this.dialogAction === 'Editar'){
       this.edit();
     }
     else{

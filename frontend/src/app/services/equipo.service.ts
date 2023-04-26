@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class EquipoService {
-  url = environment.apiUrl;
+  url = 'siec-production.up.railway.app';
 
   constructor(private httpClient:HttpClient) { }
 

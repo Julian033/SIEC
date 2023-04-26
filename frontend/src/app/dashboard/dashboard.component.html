@@ -14,6 +14,7 @@
             </div>
         </div>
 
+
         <div class="column">
             <div class="card">
                 <div class="container">
@@ -23,6 +24,32 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="column">
+            <div class="card">
+                <div class="container">
+                    <h2 class="title">Total de Tipos:</h2>
+                    <h1 class="title">{{data?.type}}</h1>
+                    <p><button color="primary" class="button" [routerLink]="['/SIEC/type']">Ver Tipos</button></p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="column">
+            <div class="card">
+                <div class="container">
+                    <h2 class="title">Total de Usuarios:</h2>
+                    <h1 class="title">{{data?.user}}</h1>
+                    <p><button color="primary" class="button" [routerLink]="['/SIEC/user']">Ver Usuarios</button></p>
+                </div>
+            </div>
+        </div>
+
+        
+
+
     </div>
 
     

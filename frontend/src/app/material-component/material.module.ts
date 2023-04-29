@@ -20,6 +20,10 @@ import { ManageTypeComponent } from './manage-type/manage-type.component';
 import { TypeComponent } from './dialog/type/type.component';
 import { ManageUserComponent } from './manage-user/manage-user.component';
 import { UserComponent } from './dialog/user/user.component';
+import { ManageSoftwareComponent } from './manage-software/manage-software.component';
+import { SoftwareComponent } from './dialog/software/software.component';
+import { ManageAsignadoComponent } from './manage-asignado/manage-asignado.component';
+import { AsignadoComponent } from './dialog/asignado/asignado.component';
 
 @NgModule({
   imports: [
@@ -45,6 +49,10 @@ import { UserComponent } from './dialog/user/user.component';
     TypeComponent,
     ManageUserComponent,
     UserComponent,
+    ManageSoftwareComponent,
+    SoftwareComponent,
+    ManageAsignadoComponent,
+    AsignadoComponent,
   ]
 })
 export class MaterialComponentsModule {}

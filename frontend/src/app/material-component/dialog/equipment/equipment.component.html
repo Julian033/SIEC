@@ -178,20 +178,20 @@
                     <mat-label>Version de Office</mat-label>
                     <input matInput formControlName="office" required>
                     <mat-error *ngIf="equipmentForm.controls.office.touched && equipmentForm.controls.office.invalid">
-                        <span *ngIf="equipmentForm.controls.sn.error.required">Este campo es obligatorio</span>
-                        <span *ngIf="equipmentForm.controls.sn.error.pattern">Este campo no es valido</span>
+                        <span *ngIf="equipmentForm.controls.office.error.required">Este campo es obligatorio</span>
+                        <span *ngIf="equipmentForm.controls.office.error.pattern">Este campo no es valido</span>
                     </mat-error>
                 </mat-form-field>
             </div>
 
-            
             <div fxLayout="row wrap">
                 <mat-form-field appearance="fill" fxFlex>
-                    <mat-label>Resguardo</mat-label>
-                    <input matInput formControlName="guard" required>
-                    <mat-error *ngIf="equipmentForm.controls.guard.touched && equipmentForm.controls.guard.invalid">
-                        <span *ngIf="equipmentForm.controls.sn.error.required">Este campo es obligatorio</span>
-                        <span *ngIf="equipmentForm.controls.sn.error.pattern">Este campo no es valido</span>
+                    <mat-label>Fecha de Instalacion</mat-label>
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <input matInput formControlName="fechaInstalacion" required>
+                    <mat-error *ngIf="equipmentForm.controls.fechaInstalacion.touched && equipmentForm.controls.fechaInstalacion.invalid">
+                        <span *ngIf="equipmentForm.controls.fechaInstalacion.error.required">Este campo es obligatorio</span>
+                        <span *ngIf="equipmentForm.controls.fechaInstalacion.error.pattern">Este campo no es valido</span>
                     </mat-error>
                 </mat-form-field>
             </div>

@@ -101,6 +101,7 @@ export class AreaComponent implements OnInit {
       areaId:this.dialogData.data.areaId,
       name: formData.name
     }
+    
     this.areaService.delete(data).subscribe((response:any)=>{
       this.dialogRef.close();
       this.onEditArea.emit();

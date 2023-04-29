@@ -45,7 +45,6 @@ selected: any;
 
       this.router.navigate(['/SIEC/dashboard']);
       const tok = localStorage.getItem('token');
-      console.log(tok);
 
     }, (error) => {
       this.ngxService.stop();

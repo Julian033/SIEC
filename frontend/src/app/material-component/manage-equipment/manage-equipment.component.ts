@@ -16,7 +16,7 @@ import { EquipmentComponent } from '../dialog/equipment/equipment.component';
   styleUrls: ['./manage-equipment.component.scss']
 })
 export class ManageEquipmentComponent implements OnInit {
- displayedColumns:string[] = ['sn','inventory','brand','model','guard','type','area','edit']
+ displayedColumns:string[] = ['sn','inventory','brand','model','type','area','edit']
  dataSource:any;
  responseMessage: any;
  pageSizeOptions: number[] = [50, 100, 500, 1000];

@@ -7,6 +7,7 @@ const areaRoute = require ('./routes/area');
 const tipoRoute = require ('./routes/type');
 const equipoRoute = require('./routes/equipo');
 const dashboardRoute = require('./routes/dashboard');
+const equipoAsignadoRoute = require('./routes/equipoAsignado');
 
 app.use(cors());
 app.use(express.urlencoded({extended: true}));
@@ -16,6 +17,8 @@ app.use('/area',areaRoute);
 app.use('/type',tipoRoute);
 app.use('/equipo',equipoRoute);
 app.use('/dashboard', dashboardRoute);
+app.use('/equipoAsignado',equipoAsignadoRoute);
+
 
 module.exports = app;
   

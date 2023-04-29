@@ -5,13 +5,23 @@ import { ManageAreaComponent } from './manage-area/manage-area.component';
 import { ManageEquipmentComponent } from './manage-equipment/manage-equipment.component';
 import { ManageTypeComponent } from './manage-type/manage-type.component';
 import { ManageUserComponent } from './manage-user/manage-user.component';
-
+import { ManageSoftwareComponent } from './manage-software/manage-software.component';
+import { ManageAsignadoComponent } from './manage-asignado/manage-asignado.component';
+ 
 
 
 export const MaterialRoutes: Routes = [
     {
         path:'equipment',
         component:ManageEquipmentComponent,
+        canActivate:[RouteGuardService],
+        data:{
+            expectedRole:['admin']
+        }   
+    },
+    {
+        path:'software',
+        component:ManageSoftwareComponent,
         canActivate:[RouteGuardService],
         data:{
             expectedRole:['admin']
@@ -30,6 +40,14 @@ export const MaterialRoutes: Routes = [
     {
         path:'type',
         component:ManageTypeComponent,
+        canActivate:[RouteGuardService],
+        data:{
+            expectedRole:['admin']
+        }   
+    },
+    {
+        path:'asignado',
+        component:ManageAsignadoComponent ,
         canActivate:[RouteGuardService],
         data:{
             expectedRole:['admin']

@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class UserService {
-  url = 'siec-production.up.railway.app';
+  url = environment.apiUrl;
 
   constructor(private httpClient: HttpClient) { }
 

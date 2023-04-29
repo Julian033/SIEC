@@ -1,0 +1,50 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row fxLayout="row">
+        <span class = "title-center">{{dialogData.action}} </span>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="asignadoForm">
+        <div fxFlex fxLayout="column">
+
+            <div fxLayout="row wrap">
+                <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Inventario</mat-label>
+                    <input matInput formControlName="inventory" required>
+                    <mat-error *ngIf="asignadoForm.controls.inventory.touched && asignadoForm.controls.inventory.invalid">
+                        <span *ngIf="asignadoForm.controls.inventory.errors.required">This field is mandatory.</span>
+                        <span *ngIf="asignadoForm.controls.inventory.errors.pattern">This field is invalid.</span>
+
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            
+            <div fxLayout="row wrap">
+                <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Area</mat-label>
+                    <mat-select formControlName="areaId" (selectionChange)="getUsersByArea()">
+                        <mat-option *ngFor="let area of areas" [value]="area.areaId">{{area.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            
+            <div fxLayout="row wrap">
+                <mat-form-field appearance="fill" fxFlex>
+                    <mat-label>Usuario</mat-label>
+                    <mat-select formControlName="userId">
+                        <mat-option *ngFor="let user of users" [value]="user.userId">{{user.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            
+        </div>
+
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="center">
+    <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()" 
+    [disabled]="!(asignadoForm.valid && asignadoForm.dirty)">{{action}}</button>
+    <button mat-raised-button color="primary" mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

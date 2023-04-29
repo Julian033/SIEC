@@ -5,34 +5,37 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class AreaService {
-  url = environment.apiUrl;
-
+export class AsignadoService {
+url = environment.apiUrl;
 
   constructor(private httpClient:HttpClient) { }
 
   add(data:any){
     return this.httpClient.post(this.url+
-      "/area/add",data,{
+      "/equipoAsignado/add",data,{
       headers:new HttpHeaders().set('Content-Type',"application/json")
     })
   }
 
   update(data:any){
     return this.httpClient.patch(this.url+
-      "/area/update",data,{
+      "/equipoAsignado/update",data,{
       headers:new HttpHeaders().set('Content-Type',"application/json")
     })
   }
 
 
-  getArea(){
-    return this.httpClient.get(this.url+"/area/get");
+  get(){
+    return this.httpClient.get(this.url+"/equipoAsignado/get");
   }
-  
-  delete(areaId:any){
+
+  getUsersByArea(id:any){
+    return this.httpClient.get(`${this.url}/equipoAsignado/getById/${id}`);
+  }
+
+  delete(asignadoId:any){
     return this.httpClient.delete(this.url+
-      "/area/delete/"+areaId,{
+      "/equipoAsignado/delete/"+asignadoId,{
         headers: new HttpHeaders().set('Content-Type',"application/json")
       })
   }

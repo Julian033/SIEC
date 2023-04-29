@@ -19,6 +19,9 @@ import {NgxUiLoaderModule,NgxUiLoaderConfig,SPINNER,PB_DIRECTION} from "ngx-ui-l
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { LoginComponent } from './login/login.component';
 import { TokenInterceptorInterceptor } from './services/token-interceptor.interceptor';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 const ngxUiLoaderConfig:NgxUiLoaderConfig = {
@@ -55,6 +58,9 @@ const ngxUiLoaderConfig:NgxUiLoaderConfig = {
     FlexLayoutModule,
     SharedModule,
     HttpClientModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule,
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig)
   ],
   providers: [HttpClientModule,{provide:HTTP_INTERCEPTORS,useClass:TokenInterceptorInterceptor,multi:true}],

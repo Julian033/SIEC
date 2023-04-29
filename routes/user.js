@@ -15,8 +15,8 @@ router.post('/add', (req, res) => {
     pool.query(query, [user.email], (err, results) => {
         if (!err) {
             if (results.length <= 0) {
-                query = "insert into usuarios (name,password,email,role,status,areaId) values (?,?,?,?,?,?)";
-                connection.query(query, [user.name, user.password, user.email,user.role,user.status,user.areaId], (err, results) => {
+               const query = "insert into usuarios (name,password,email,role,status,areaId) values (?,?,?,?,?,?)";
+                pool.query(query, [user.name, user.password, user.email,user.role,user.status,user.areaId], (err, results) => {
                     if (!err) {
                         return res.status(200).json({ message: "Registrado Exitosamente" });
                     }
@@ -36,27 +36,35 @@ router.post('/add', (req, res) => {
     })
 })
 
-router.post('/signup', async (req, res) => {
+router.post('/signup', (req, res) => {
     let user = req.body;
-    const connection = await pool.getConnection();
-    try {
-        const [rows] = await connection.execute("SELECT email, password, name, role, status, areaId FROM usuarios WHERE email = ?", [user.email]);
-        if (rows.length <= 0) {
-            const [result] = await connection.execute("INSERT INTO usuarios (name, password, email, role, status, areaId) VALUES (?, ?, ?, 'user', 'false', '1')", [user.name, user.password, user.email]);
-            return res.status(200).json({ message: "Registrado Exitosamente" });
-        } else {
-            return res.status(400).json({ message: "El correo ingresado ya existe." });
+    query = "select email,password,name,role,status,areaId from usuarios where email=?";
+    pool.query(query, [user.email], (err, results) => {
+        if (!err) {
+            if (results.length <= 0) {
+                query = "insert into usuarios (name,password,email,role,status,areaId) values (?,?,?,'user','false','1')";
+                pool.query(query, [user.name, user.password, user.email], (err, results) => {
+                    if (!err) {
+                        return res.status(200).json({ message: "Registrado Exitosamente" });
+                    }
+
+                    else {
+                        return res.status(500).json(err);
+                    }
+                })
+            }
+            else {
+                return res.status(400).json({ message: "El correo ingresado ya existe." });
+            }
         }
-    } catch (error) {
-        return res.status(500).json(error);
-    } finally {
-        connection.release();
-    }
-});
+        else {
+            return res.status(500).json(err);
+        }
+    })
+})
 
 router.patch('/update',auth.authenticationToken,checkRole.checkRole, (req,res,next)=>{
     let area = req.body;
-    console.log(area);
     const query = "update usuarios set name=?,email=?,password=?,role=?,status=?,areaId=? where userId=?";
     pool.query(query,[area.name,area.email,area.password,area.role,area.status,area.areaId,area.userId],(err,results)=>{
         if(!err){
